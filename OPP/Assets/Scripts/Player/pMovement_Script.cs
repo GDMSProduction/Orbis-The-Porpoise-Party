@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class pMovement_Script : MonoBehaviour
 {
-    [SerializeField] Vector3 moveDirection;
-    [SerializeField] Vector3 lookDirection;
-    [SerializeField] float walkSpeed;
-    [SerializeField] float sprintSpeed;
-
+    [SerializeField, Tooltip("Multiplier for how fast the character moves normally.")] float walkSpeed;
+    [SerializeField, Tooltip("Multiplier for how fast the character moves when sprinting.")] float sprintSpeed;
+    [SerializeField, Tooltip("Multiplier for the force applied when the character jumps.")] float jumpSpeed = 3;
+    [SerializeField, Tooltip("Amount of gravity being applied to character.")] float gravity;
+    private float verticalVel;
+    Vector3 moveDirection;
     CharacterController controller;
 
     // Start is called before the first frame update
@@ -23,24 +24,37 @@ public class pMovement_Script : MonoBehaviour
     {
         // Movement and Looking
         moveDirection.x = Input.GetAxis("Left_Horizontal");
-        moveDirection.y = transform.position.y;
         moveDirection.z = Input.GetAxis("Left_Vertical");
+        transform.rotation = Quaternion.LookRotation(new Vector3(moveDirection.x, 0, moveDirection.z));
 
-        transform.LookAt(moveDirection);
-        // Jumping
-        if (Input.GetButton("AButton"))
-        {
-            GetComponent<Rigidbody>().velocity = Vector3.up * walkSpeed;
-        }
         // Sprinting
         if (Input.GetButton("BButton"))
         {
             moveDirection *= sprintSpeed;
         }
+        // Walking
         else
         {
             moveDirection *= walkSpeed;
         }
-        controller.SimpleMove(moveDirection);
+        
+        // Jumping
+        if (controller.isGrounded)
+        {
+            verticalVel = -gravity * Time.deltaTime;
+            if (Input.GetButtonDown("AButton"))
+            {
+                verticalVel = jumpSpeed;
+            }
+        }
+        else
+        {
+            verticalVel -= gravity * Time.deltaTime;
+        }
+        moveDirection.y = verticalVel;
+        // Move Player
+        controller.Move(moveDirection * Time.deltaTime);
+
+
     }
 }
