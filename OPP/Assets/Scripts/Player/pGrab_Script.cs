@@ -57,17 +57,22 @@ public class pGrab_Script : MonoBehaviour
             // If the player has thrown the item
             else
             {
+                // LERP item to target position
                 item.transform.position = Vector3.Lerp(item.transform.position, target, Time.deltaTime * 10.0f);
+                // Round current position
                 Vector3 current = new Vector3();
                 current.x = Mathf.Round(item.transform.position.x);
                 current.y = Mathf.Round(item.transform.position.y);
                 current.z = Mathf.Round(item.transform.position.z);
+                // Round target position
                 Vector3 test = new Vector3();
                 test.x = Mathf.Round(target.x);
                 test.y = Mathf.Round(target.y);
                 test.z = Mathf.Round(target.z);
+                // Check if current position equals the target position
                 if (current == test)
                 {
+                    // Return item back to original color, and reset variables
                     item.GetComponent<MeshRenderer>().material.color = Color.white;
                     item = null;
                     hasItem = false;
@@ -80,8 +85,10 @@ public class pGrab_Script : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        // If an item is already being held, return;
         if (hasItem == true)
             return;
+        // If the object can be picked up
         if (other.gameObject.tag == "PickUp")
         {
             if (Input.GetButtonDown("XButton"))
