@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Created by: Logan Acree
+// Last Edited by: Logan Acree
 public class pGrab_Script : MonoBehaviour
 {
-
-    public GameObject reticle;
-    public GameObject item = null;
-    public Vector3 target;
-    private bool hasItem = false;
-    private bool hasThrown = false;
-    private float dropTimer;
+    private bool hasItem = false;   // used to check if the player has an item or not.
+    private bool hasThrown = false; // used to check if the player has thrown an item or not.
+    private float dropTimer;        // counter for how long the button to drop an object has been pressed.
+    private Vector3 target;         // Target location for the Item when thrown. Set to the reticle's position at the time the button to throw the object was pressed.
+    [Header("Grabbing and Throwing")]
+    [Tooltip("The current Item GameObject being held by the player.")] public GameObject pItem = null;
+    [Tooltip("The GameObject being used as the player's reticle.")] public GameObject pReticle;
     [SerializeField, Tooltip("Amount of time a button needs to be held down to drop an object.")] float timeToDrop;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,21 +31,22 @@ public class pGrab_Script : MonoBehaviour
             if (!hasThrown)
             {
                 // Move the item with the player
-                if (item != null)
+                if (pItem != null)
                 {
-                    item.transform.position = transform.position;
+                    pItem.transform.position = transform.position;
                 }
                 // Hold Button down to drop item
                 if (Input.GetButton("XButton"))
                 {
                     dropTimer += Time.deltaTime;
+                    // Drop Item, reset variables, and set reticle to inactive
                     if (dropTimer >= timeToDrop)
                     {
-                        item.GetComponent<MeshRenderer>().material.color = Color.white;
-                        item = null;
+                        pItem.GetComponent<MeshRenderer>().material.color = Color.white;
+                        pItem = null;
                         hasItem = false;
                         dropTimer = 0.0f;
-                        reticle.SetActive(false);
+                        pReticle.SetActive(false);
                     }
                 }
                 // Throw the item
@@ -50,20 +54,21 @@ public class pGrab_Script : MonoBehaviour
                 {
                     // Throw item towards reticle
                     hasThrown = true;
-                    target = reticle.transform.position;
-                    reticle.SetActive(false);
+                    target = pReticle.transform.position;
+                    pReticle.transform.localPosition = new Vector3(0.2f, -1.065f, 0.3f);
+                    pReticle.SetActive(false);
                 }
             }
             // If the player has thrown the item
             else
             {
                 // LERP item to target position
-                item.transform.position = Vector3.Lerp(item.transform.position, target, Time.deltaTime * 10.0f);
+                pItem.transform.position = Vector3.Lerp(pItem.transform.position, target, Time.deltaTime * 10.0f);
                 // Round current position
                 Vector3 current = new Vector3();
-                current.x = Mathf.Round(item.transform.position.x);
-                current.y = Mathf.Round(item.transform.position.y);
-                current.z = Mathf.Round(item.transform.position.z);
+                current.x = Mathf.Round(pItem.transform.position.x);
+                current.y = Mathf.Round(pItem.transform.position.y);
+                current.z = Mathf.Round(pItem.transform.position.z);
                 // Round target position
                 Vector3 test = new Vector3();
                 test.x = Mathf.Round(target.x);
@@ -73,8 +78,8 @@ public class pGrab_Script : MonoBehaviour
                 if (current == test)
                 {
                     // Return item back to original color, and reset variables
-                    item.GetComponent<MeshRenderer>().material.color = Color.white;
-                    item = null;
+                    pItem.GetComponent<MeshRenderer>().material.color = Color.white;
+                    pItem = null;
                     hasItem = false;
                     hasThrown = false;
                     target = Vector3.zero;
@@ -87,7 +92,9 @@ public class pGrab_Script : MonoBehaviour
     {
         // If an item is already being held, return;
         if (hasItem == true)
+        {
             return;
+        }
         // If the object can be picked up
         if (other.gameObject.tag == "PickUp")
         {
@@ -95,10 +102,10 @@ public class pGrab_Script : MonoBehaviour
             {
                 Debug.Log("Pressed XBUTTON");
                 // Turn reticle on
-                reticle.SetActive(true);
+                pReticle.SetActive(true);
                 // Convert into world space
-                item = other.gameObject;
-                item.GetComponent<MeshRenderer>().material.color = Color.red;
+                pItem = other.gameObject;
+                pItem.GetComponent<MeshRenderer>().material.color = Color.red;
                 hasItem = true;
             }   
         }
