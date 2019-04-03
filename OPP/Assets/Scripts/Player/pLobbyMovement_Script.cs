@@ -2,25 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Created by: Logan Acree
-// Last Edited by: Logan Acree
-public class pMovement_Script : MonoBehaviour
+public class pLobbyMovement_Script : BaseMovement_Script
 {
-    [Header("Movement Modifiers")]
-    [SerializeField, Tooltip("Multiplier for how fast the character moves normally.")] float walkSpeed;
-    [SerializeField, Tooltip("Multiplier for how fast the character moves when sprinting.")] float sprintSpeed;
-    [SerializeField, Tooltip("Multiplier for the force applied when the character jumps.")] float jumpSpeed = 3;
-    [SerializeField, Tooltip("Amount of gravity being applied to character.")] float gravity;
-    [HideInInspector] public  Vector3 moveDirection;         // The current direction the player is moving.
-    [HideInInspector] public float verticalVel;              // The current vertical velocity of the player.
-    [HideInInspector] public CharacterController controller; // The CharacterController Component attached to the player
 
-    // Start is called before the first frame update
-    void Start()
+    private float verticalVelocity; // The current vertical velocity of the player.
+
+    // Called when this component is enabled
+    void OnEnable()
     {
-        // Initalize moveDirection, and set controller.
-        moveDirection = Vector3.zero;
-        controller = gameObject.GetComponent<CharacterController>();
+        // Initialize Variables
+        walkSpeed = 3.0f;
+        sprintSpeed = 6.0f;
+        jumpSpeed = 3.0f;
+        gravity = 14.0f;
     }
 
     // Update is called once per frame
@@ -45,26 +39,26 @@ public class pMovement_Script : MonoBehaviour
         {
             moveDirection *= walkSpeed;
         }
-        
+
         // Jumping: Player on Ground
         if (controller.isGrounded)
         {
             // Set the velocity to counter gravity, keeping player on the ground.
-            verticalVel = -gravity * Time.deltaTime;
+            verticalVelocity = -gravity * Time.deltaTime;
             // Set vertical velocity to the jump speed/force.
             if (Input.GetButtonDown("AButton"))
-            {                
-                verticalVel = jumpSpeed;
+            {
+                verticalVelocity = jumpSpeed;
             }
         }
         // Jumping: Player in Air
         else
         {
             // Decrease vertical velocity to return the player to the ground naturally.
-            verticalVel -= gravity * Time.deltaTime;
+            verticalVelocity -= gravity * Time.deltaTime;
         }
         // Set move direction
-        moveDirection.y = verticalVel;
+        moveDirection.y = verticalVelocity;
         // Move Player
         controller.Move(moveDirection * Time.deltaTime);
     }

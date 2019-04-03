@@ -3215,15 +3215,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 388898510}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ebea607287d8d343bcef44f46a11b46, type: 3}
+  m_Script: {fileID: 11500000, guid: 553a8db86431e204ea74308f727be6aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 3
-  sprintSpeed: 6
-  jumpSpeed: 3
-  gravity: 14
+  heldItem: {fileID: 0}
+  reticle: {fileID: 0}
+  timeToDrop: 0
+  hasItem: 0
+  hasThrown: 0
 --- !u!143 &388898513
 CharacterController:
   m_ObjectHideFlags: 0
@@ -3242,6 +3243,24 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &388898514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 388898510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b91fee8b5d81eb0409362fc402fe9eeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 0}
+  walkSpeed: 0
+  sprintSpeed: 0
+  jumpSpeed: 0
+  gravity: 0
+  moveDirection: {x: 0, y: 0, z: 0}
 --- !u!1 &534669902
 GameObject:
   m_ObjectHideFlags: 0
@@ -4462,6 +4481,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerCharacter_big
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: ffe847e5184859144870bee1f1d39225, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: ffe847e5184859144870bee1f1d39225, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.27
@@ -4859,7 +4882,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh3964
+  m_Name: pb_Mesh3968
   serializedVersion: 9
   m_SubMeshes:
   - serializedVersion: 2
@@ -7333,9 +7356,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce8c0a70f50d43409615db27bae24d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reticle: {fileID: 1309523979}
   item: {fileID: 0}
-  target: {x: 0, y: 0, z: 0}
+  reticle: {fileID: 0}
   timeToDrop: 2
 --- !u!1 &2108830547
 GameObject:
