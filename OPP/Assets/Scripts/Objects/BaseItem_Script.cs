@@ -9,6 +9,7 @@ public class BaseItem_Script : MonoBehaviour
     [Tooltip("The damage afflicted to other entities by this object.")] public float damage;
     [HideInInspector] public bool isHeld;
     [HideInInspector] public bool isThrown;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,9 +24,7 @@ public class BaseItem_Script : MonoBehaviour
             // If item is held, move it with the player
             if (isHeld)
             {
-                Vector3 position = player.transform.position;
-                position.z += 1.026f;
-                transform.position = position;
+                transform.position = player.GetComponent<pBehavior_Script>().bone.transform.position;
             }
             // If the item has been thrown.
             if (isThrown)
@@ -34,7 +33,6 @@ public class BaseItem_Script : MonoBehaviour
             }
         }
     }
-
 
     /// <summary>
     /// Pick up item and set variables
@@ -48,7 +46,6 @@ public class BaseItem_Script : MonoBehaviour
         GetComponent<MeshRenderer>().material.color = Color.red;
     }
 
-
     /// <summary> 
     /// Drop Item and reset variables
     /// </summary>
@@ -59,7 +56,6 @@ public class BaseItem_Script : MonoBehaviour
         player = null;
         GetComponent<MeshRenderer>().material.color = Color.white;
     }
-
 
     /// <summary>
     /// Throw Item and update variables
@@ -72,7 +68,9 @@ public class BaseItem_Script : MonoBehaviour
         isThrown = true;
     }
 
-    // Move Item towards target
+    /// <summary>
+    /// LERP the object from its current position to the target position at a constant speed.
+    /// </summary>
     private void MoveToTarget()
     {
         // LERP item to target position

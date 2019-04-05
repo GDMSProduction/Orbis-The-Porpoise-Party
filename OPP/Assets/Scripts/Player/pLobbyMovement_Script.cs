@@ -21,8 +21,8 @@ public class pLobbyMovement_Script : BaseMovement_Script
     void Update()
     {
         // Get input from controller for movement
-        moveDirection.x = Input.GetAxis("Left_Horizontal");
-        moveDirection.z = Input.GetAxis("Left_Vertical");
+        moveDirection.x = Input.GetAxis("LS_Horizontal");
+        moveDirection.z = Input.GetAxis("LS_Vertical");
         // If moving, then make player face direction of movement
         if (moveDirection.x != 0 && moveDirection.z != 0)
         {
